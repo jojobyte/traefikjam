@@ -1,7 +1,7 @@
 
 ![npm](https://img.shields.io/npm/v/traefikjam)
 [![Node Build](https://github.com/jojobyte/traefikjam/actions/workflows/node-build.yml/badge.svg)](https://github.com/jojobyte/traefikjam/actions/workflows/node-build.yml)
-![Docker Image Version](https://img.shields.io/docker/v/jojobyte/traefikjam?label=docker%20hub)
+![Docker Image Version](https://img.shields.io/docker/v/jojobyte/traefikjam/latest?label=DockerHub)
 [![Docker Build](https://github.com/jojobyte/traefikjam/actions/workflows/docker-build.yml/badge.svg)](https://github.com/jojobyte/traefikjam/actions/workflows/docker-build.yml)
 
 # Traefik Jam
