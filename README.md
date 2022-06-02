@@ -21,4 +21,9 @@ docker run --rm -it \
   -v $PWD/data/acme.json:/acme.json \
   -v $PWD/certs:/opt/app/certs \
   jojobyte/traefikjam:latest -- -h
+
+docker run --rm -it \
+  -v $PWD/data/acme.json:/acme.json \
+  -v $PWD/certs:/opt/app/certs \
+  jojobyte/traefikjam:latest -- /acme.json example.net
 ```
