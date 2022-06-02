@@ -1,0 +1,40 @@
+{
+  "name": "traefikjam",
+  "version": "0.0.0",
+  "description": "A tiny (zero dependency) Node.js CLI utility to convert Traefik Let's Encrypt certificates from acme.json to PEM files",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jojobyte/traefikjam.git"
+  },
+  "keywords": [
+    "cli",
+    "traefik",
+    "ssl",
+    "letsencrypt",
+    "docker",
+    "acme",
+    "acme.json",
+    "pem"
+  ],
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "traefik-jam": "bin/traefik-jam.js",
+    "traefikjam": "bin/traefik-jam.js"
+  },
+  "files": [
+    "bin/",
+    "src/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jojobyte <byte@jojo.io> (https://jojo.io/)",
+  "license": "MIT",
+  "engines": {
+    "node": "^18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
