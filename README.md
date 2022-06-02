@@ -1,7 +1,7 @@
 
 ![npm](https://img.shields.io/npm/v/traefikjam)
 [![Node Build](https://github.com/jojobyte/traefikjam/actions/workflows/node-build.yml/badge.svg)](https://github.com/jojobyte/traefikjam/actions/workflows/node-build.yml)
-![Docker Image Version (latest semver)](https://img.shields.io/docker/v/jojobyte/traefikjam?label=docker%20hub)
+![Docker Image Version](https://img.shields.io/docker/v/jojobyte/traefikjam?label=docker%20hub)
 [![Docker Build](https://github.com/jojobyte/traefikjam/actions/workflows/docker-build.yml/badge.svg)](https://github.com/jojobyte/traefikjam/actions/workflows/docker-build.yml)
 
 # Traefik Jam
@@ -16,7 +16,7 @@ yarn global add traefikjam
 pnpm add -g traefikjam
 ```
 
-# Usage
+## Usage
 ```sh
 # show help
 traefikjam -h
@@ -28,7 +28,7 @@ traefikjam ./data/acme.json
 traefikjam ./data/acme.json example.net github.com
 ```
 
-# Docker
+## Docker
 ```sh
 # show help
 docker run --rm -it \
