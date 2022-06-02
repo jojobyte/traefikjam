@@ -1,6 +1,6 @@
 {
   "name": "traefikjam",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A tiny (zero dependency) Node.js CLI utility to convert Traefik Let's Encrypt certificates from acme.json to PEM files",
   "repository": {
     "type": "git",
