@@ -27,7 +27,9 @@ export async function exportCerts(
 ) {
   console.info('export traefik certs for domain:', search)
 
-  let data = JSON.parse((await fs.promises.readFile(file === '.' ? `${file}/acme.json` : file)).toString())
+  let data = JSON.parse((await fs.promises.readFile(
+    file === '.' ? `${file}/acme.json` : file
+  )).toString())
 
   if (!data) {
     return
@@ -40,8 +42,6 @@ export async function exportCerts(
   } else {
     data = data.Certificates
   }
-
-  // console.log('no data certs', data)
 
   if (search !== null) {
     data = data.filter(
@@ -63,8 +63,8 @@ export async function exportCerts(
 
     let d = main.replace('*.', '_.')
 
-    const [cf] = await saveBase64(`${d}.crt`, cert, outputDir)
-    const [kf] = await saveBase64(`${d}.key`, skey, outputDir)
+    const [cf] = await save(`${d}.crt`, decodeBase64(cert), outputDir)
+    const [kf] = await save(`${d}.key`, decodeBase64(skey), outputDir)
     const [tf] = await save(`${d}.json`, JSON.stringify(dom), outputDir)
 
     console.info(`saved ${main}`, [cf, kf, tf])
@@ -96,21 +96,18 @@ export async function save(file, data, outputDir = 'certs/') {
 }
 
 /**
- * Save Base64 file
+ * Decode Base64 file
  *
  * @example
- *   let [filepath, dir] = save('./foobar.txt', 'foo', 'data/')
- *   // filepath === './data/foobar.txt'
- *   // dir === './data'
+ *   let decoded = decodeBase64('Zm9vYmFy')
+ *   // decoded === 'foobar'
  *
- * @param {string} file Name of file to save
- * @param {string} data Data to save to file
- * @param {string} [outputDir='certs/'] Directory to output files
+ * @param {string} data Base64 encoded data
  *
- * @returns {[string,string]} File path and output directory
+ * @returns {string} Decoded data
  */
-export async function saveBase64(file, data, outputDir = 'certs/') {
-  return await save(file, Buffer.from(data, 'base64').toString(), outputDir)
+export function decodeBase64(data) {
+  return Buffer.from(data, 'base64').toString()
 }
 
 /**
