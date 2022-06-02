@@ -25,25 +25,49 @@ export async function exportCerts(
   search = null,
   outputDir = 'certs/'
 ) {
-  console.log('export traefik certs for domain:', search)
+  console.info('export traefik certs for domain:', search)
 
-  let data = JSON.parse((await fs.promises.readFile(file === '.' ? `${file}/acme.json` : file)).toString()).Certificates
+  let data = JSON.parse((await fs.promises.readFile(file === '.' ? `${file}/acme.json` : file)).toString())
 
   if (!data) {
     return
   }
 
-  if (search !== null) {
-    data = data.filter(v => v.Domain.Main.includes(search))
+  if (!data.Certificates) {
+    data = Object.values(data).flatMap(
+      v => v.Certificates !== null ? v.Certificates : []
+    )
+  } else {
+    data = data.Certificates
   }
 
-  data.forEach(async ({ Certificate, Key, Domain }) => {
-    let d = Domain.Main.replace('*.', '_.')
+  // console.log('no data certs', data)
 
-    const [cf] = await save(`${d}.crt`, Certificate, outputDir)
-    const [kf] = await save(`${d}.key`, Key, outputDir)
+  if (search !== null) {
+    data = data.filter(
+      v =>
+        v.Domain?.Main?.includes(search) ||
+        v.domain?.main?.includes(search)
+    )
+  }
 
-    console.log(`saved ${Domain.Main}`, [cf, kf])
+  data.forEach(async c => {
+    let {
+      Certificate, Key, Domain,
+      certificate, key, domain,
+    } = c
+    let dom = Domain || domain
+    let main = dom.Main || dom.main
+    let cert = Certificate || certificate
+    let skey = Key || key
+
+    let d = main.replace('*.', '_.')
+
+    const [cf] = await saveBase64(`${d}.crt`, cert, outputDir)
+    const [kf] = await saveBase64(`${d}.key`, skey, outputDir)
+    const [tf] = await save(`${d}.json`, JSON.stringify(dom), outputDir)
+
+    console.info(`saved ${main}`, [cf, kf, tf])
   })
 }
 
@@ -66,11 +90,27 @@ export async function save(file, data, outputDir = 'certs/') {
 
   fs.mkdirSync(outputDir, { recursive: true })
 
-  await fs.createWriteStream(fp).write(
-    Buffer.from(data, 'base64').toString()
-  )
+  await fs.createWriteStream(fp).write(data)
 
   return [fp, outputDir]
+}
+
+/**
+ * Save Base64 file
+ *
+ * @example
+ *   let [filepath, dir] = save('./foobar.txt', 'foo', 'data/')
+ *   // filepath === './data/foobar.txt'
+ *   // dir === './data'
+ *
+ * @param {string} file Name of file to save
+ * @param {string} data Data to save to file
+ * @param {string} [outputDir='certs/'] Directory to output files
+ *
+ * @returns {[string,string]} File path and output directory
+ */
+export async function saveBase64(file, data, outputDir = 'certs/') {
+  return await save(file, Buffer.from(data, 'base64').toString(), outputDir)
 }
 
 /**
