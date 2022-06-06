@@ -8,6 +8,8 @@
 
 A small (zero dependency) Node.js CLI utility to convert Traefik Let's Encrypt certificates from acme.json to PEM files
 
+## Node.js Install
+
 ```sh
 npm install -g traefikjam
 
@@ -15,8 +17,11 @@ yarn global add traefikjam
 
 pnpm add -g traefikjam
 ```
+[Install from NPM](https://www.npmjs.com/package/traefikjam)
 
-## Usage
+[Install from GitHub Packages](https://github.com/jojobyte/traefikjam/packages/1456711)
+
+## CLI Usage
 ```sh
 # show help
 traefikjam -h
@@ -26,19 +31,27 @@ traefikjam ./data/acme.json
 
 # extract example.net & github.com from ./data/acme.json
 traefikjam ./data/acme.json example.net github.com
+
+# watch ./data/acme.json and export selected domains on change
+traefikjam --watch ./data/acme.json example.net github.com
 ```
 
 ## Docker
+
 ```sh
 # show help
 docker run --rm -it \
-  -v $PWD/data/acme.json:/acme.json \
+  -v $PWD/data:/opt/app/data \
   -v $PWD/certs:/opt/app/certs \
   jojobyte/traefikjam:latest -- -h
 
 # extract example.net from /acme.json
 docker run --rm -it \
-  -v $PWD/data/acme.json:/acme.json \
+  -v $PWD/data:/opt/app/data \
   -v $PWD/certs:/opt/app/certs \
-  jojobyte/traefikjam:latest -- /acme.json example.net
+  jojobyte/traefikjam:latest -- ./data/acme.json example.net
 ```
+
+[Install from Docker Hub](https://hub.docker.com/r/jojobyte/traefikjam)
+
+[Install from GitHub Container Registry](https://github.com/jojobyte/traefikjam/pkgs/container/traefikjam)
