@@ -10,8 +10,8 @@ ADD ./ $APP_DIR
 
 RUN npm link
 
-ENTRYPOINT /usr/local/bin/traefikjam $@
+ENTRYPOINT ["/usr/local/bin/traefikjam"]
 
-VOLUME /acme.json $APP_DIR/certs
+VOLUME $APP_DIR/data $APP_DIR/certs
 
-CMD /usr/local/bin/traefikjam
+CMD ["-w", "./data/acme.json"]
