@@ -27,9 +27,12 @@ export async function exportCerts(
 ) {
   console.info('export traefik certs for domain:', search)
 
-  let data = JSON.parse((await fs.promises.readFile(
-    file === '.' ? `${file}/acme.json` : file
-  )).toString())
+  let fileData = await fs.promises.readFile(
+    file === '.' ? `${file}/acme.json` : file,
+    'utf8'
+  )
+
+  let data = await JSON.parse(fileData)
 
   if (!data) {
     return
@@ -72,6 +75,56 @@ export async function exportCerts(
 }
 
 /**
+ * Watch certificates directory
+ *
+ * @example
+ *   // watch all domains in file
+ *   await watchCerts('./acme.json')
+ *
+ * @param {string} [inputDir='data/'] input directory for certificates
+ * @param {string[]} targetDomains Array of domain strings to find
+ *
+ * @void
+ */
+export async function watchCerts(
+  inputDir = './data/',
+  targetDomains = process.argv.slice(3) || [],
+) {
+  const pp = path.parse(inputDir)
+  const ac = new AbortController();
+  const { signal } = ac;
+
+  try {
+    const watcher = fs.promises.watch(inputDir, { signal, persistent: true });
+    const changes = {}
+
+    console.group('watching')
+    console.info('path', path.resolve(inputDir))
+    console.info('domains', targetDomains)
+    console.groupEnd()
+
+    for await (const event of watcher) {
+      const dir = path.resolve(path.join(pp.dir, event.filename))
+      // console.info('event', event.eventType, dir)
+
+      if (changes[event.filename]) {
+        clearTimeout(changes[event.filename])
+      }
+
+      // prevent editors triggering multiple exports
+      changes[event.filename] = setTimeout(() => {
+        cmd(dir, targetDomains)
+        delete changes[event.filename]
+      }, 1000)
+    }
+  } catch (err) {
+    if (err.name === 'AbortError')
+      return;
+    throw err;
+  }
+}
+
+/**
  * Save file
  *
  * @example
@@ -108,6 +161,33 @@ export async function save(file, data, outputDir = 'certs/') {
  */
 export function decodeBase64(data) {
   return Buffer.from(data, 'base64').toString()
+}
+
+/**
+ * Array contains any
+ *
+ * @example
+ *   let contains = containsAny(['a', 'b', 'c'], ['x', 'b'])
+ *   // contains === true
+ *   let contains = containsAny(['a', 'b', 'c'], ['x', 'y', 'z'])
+ *   // contains === false
+ *
+ * @param {string[]} hay Haystack
+ * @param {string[]} needles Needles
+ *
+ * @returns {boolean} At least one of Needles exist in Haystack
+ */
+export function containsAny(hay, needles) {
+  let found = false
+
+  for (let needle of needles) {
+    if (hay.includes(needle)) {
+      found = true
+      break
+    }
+  }
+
+  return found
 }
 
 /**
