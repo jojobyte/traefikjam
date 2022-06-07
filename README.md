@@ -21,6 +21,13 @@ pnpm add -g traefikjam
 
 [Install from GitHub Packages](https://github.com/jojobyte/traefikjam/packages/1456711)
 
+## Deno Usage
+```sh
+deno run --compat --unstable --allow-env \
+  --allow-read --allow-write=./certs \
+  bin/traefik-jam.js ./data/acme.json example.net
+```
+
 ## CLI Usage
 ```sh
 # show help
@@ -34,6 +41,12 @@ traefikjam ./data/acme.json example.net github.com
 
 # watch ./data/acme.json and export selected domains on change
 traefikjam --watch ./data/acme.json example.net github.com
+```
+
+## API Usage
+```js
+import { exportCerts } from 'traefikjam'
+exportCerts('./path/to/acme.json', 'example.domain.com')
 ```
 
 ## Docker
