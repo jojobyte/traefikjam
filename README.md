@@ -46,6 +46,7 @@ traefikjam --watch ./data/acme.json example.net github.com
 ## API Usage
 ```js
 import { exportCerts } from 'traefikjam'
+
 exportCerts('./path/to/acme.json', 'example.domain.com')
 ```
 
