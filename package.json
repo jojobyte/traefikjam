@@ -8,6 +8,8 @@
   },
   "keywords": [
     "cli",
+    "backend",
+    "devops",
     "traefik",
     "ssl",
     "letsencrypt",
@@ -15,6 +17,14 @@
     "acme",
     "acme.json",
     "pem"
+  ],
+  "funding": [
+    {
+      "type" : "github",
+      "url" : "https://github.com/sponsors/jojobyte"
+    },
+    "https://ko-fi.com/jojobyte",
+    "https://liberapay.com/jojobyte/"
   ],
   "type": "module",
   "main": "src/index.js",
