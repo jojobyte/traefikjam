@@ -66,8 +66,8 @@ export async function exportCerts(
 
     let d = main.replace('*.', '_.')
 
-    const [cf] = await save(`${d}.crt`, decodeBase64(cert), outputDir)
-    const [kf] = await save(`${d}.key`, decodeBase64(skey), outputDir)
+    const [cf] = await save(`${d}.crt`, Buffer.from(cert, 'base64').toString(), outputDir)
+    const [kf] = await save(`${d}.key`, Buffer.from(skey, 'base64').toString(), outputDir)
     const [tf] = await save(`${d}.json`, JSON.stringify(dom), outputDir)
 
     console.info(`saved ${main}`, [cf, kf, tf])
@@ -146,21 +146,6 @@ export async function save(file, data, outputDir = 'certs/') {
   await fs.createWriteStream(fp).write(data)
 
   return [fp, outputDir]
-}
-
-/**
- * Decode Base64 file
- *
- * @example
- *   let decoded = decodeBase64('Zm9vYmFy')
- *   // decoded === 'foobar'
- *
- * @param {string} data Base64 encoded data
- *
- * @returns {string} Decoded data
- */
-export function decodeBase64(data) {
-  return Buffer.from(data, 'base64').toString()
 }
 
 /**
